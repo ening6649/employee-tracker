@@ -1,4 +1,5 @@
 const inquirer = require("inquirer")
+const db = require('./db/connection')
 
 const MainDataArr =[]
 
@@ -24,7 +25,7 @@ const promptQuestions = ()=> {
             return inquirer.prompt([
                 {
                     type: 'input',
-                    name: 'name',
+                    name: 'employeenamefirst',
                     message: 'Enter the first name? (Required)',
                     validate: nameInput => {
                         if (nameInput) {
@@ -37,7 +38,7 @@ const promptQuestions = ()=> {
                 },
                 {
                     type: 'input',
-                    name: 'email',
+                    name: 'employeenamelast',
                     message: 'Enter the last name(Required)',
                     validate: githubInput => {
                         if (githubInput) {
@@ -48,71 +49,66 @@ const promptQuestions = ()=> {
                         }
                     }
                 },
+                {
+                    type: 'input',
+                    name: 'employeerole',
+                    message: 'Enter the role(Required)',
+                    validate: githubInput => {
+                        if (githubInput) {
+                            return true;
+                        } else {
+                            console.log('Please enter a role!');
+                            return false;
+                        }
+                    }
+                },
+                {
+                    type: 'input',
+                    name: 'manager',
+                    message: 'Enter the manager(Required)',
+                    validate: githubInput => {
+                        if (githubInput) {
+                            return true;
+                        } else {
+                            console.log('Please enter a manager!');
+                            return false;
+                        }
+                    }
+                },
             ])
         } 
 
-        if (employeeData.type=="engineer") {
+        if (employeeData.type=="add a department") {
             return inquirer.prompt([
                 {
                     type: 'input',
-                    name: 'name',
-                    message: 'Enter the name? (Required)',
+                    name: 'departmentname',
+                    message: 'Enter the department name? (Required)',
                     validate: nameInput => {
                         if (nameInput) {
                             return true;
                         } else {
-                            console.log('Please enter a name!');
+                            console.log('Please enter a department name!');
                             return false;
                         }
                     }
                 },
-                {
-                    type: 'input',
-                    name: 'email',
-                    message: 'Enter the email(Required)',
-                    validate: githubInput => {
-                        if (githubInput) {
-                            return true;
-                        } else {
-                            console.log('Please enter an email address!');
-                            return false;
-                        }
-                    }
-                },
-                {
-                    type: 'input',
-                    name: 'github',
-                    message: 'Enter the github username(Required)',
-                    validate: githubInput => {
-                        if (githubInput) {
-                            return true;
-                        } else {
-                            console.log('Please enter a github username!');
-                            return false;
-                        }
-                    }
-                },
-                {
-                    type: 'input',
-                    name: 'id',
-                    message: 'Enter an ID ',
-                    default:"1"
-                },
-                {
-                    type: 'confirm',
-                    name: 'confirmAdd',
-                    message: 'Would you like to add another person?',
-                    default: false,
+                
+                // {
+                //     type: 'confirm',
+                //     name: 'confirmAdd',
+                //     message: 'Would you like to add another person?',
+                //     default: false,
                     
-                },
+                // },
             ])        
         } 
-        if (employeeData.type=="manager") {
+        if (employeeData.type=="add a role") {
             return inquirer.prompt([
                 {
                     type: 'input',
-                    name: 'name',
-                    message: 'Enter the name? (Required)',
+                    name: 'rolename',
+                    message: 'Enter the name of the role? (Required)',
                     validate: nameInput => {
                         if (nameInput) {
                             return true;
@@ -124,20 +120,20 @@ const promptQuestions = ()=> {
                 },
                 {
                     type: 'input',
-                    name: 'email',
-                    message: 'Enter the email(Required)',
+                    name: 'salary',
+                    message: 'Enter the salary(Required)',
                     validate: githubInput => {
                         if (githubInput) {
                             return true;
                         } else {
-                            console.log('Please enter an email address!');
+                            console.log('Please enter a salary!');
                             return false;
                         }
                     }
                 },
                 {
                     type: 'input',
-                    name: 'officenumber',
+                    name: 'departmentrole',
                     message: 'Enter the office number(Required)',
                     validate: githubInput => {
                         if (githubInput) {
@@ -148,22 +144,29 @@ const promptQuestions = ()=> {
                         }
                     }
                 },
-                {
-                    type: 'input',
-                    name: 'id',
-                    message: 'Enter an ID ',
-                    default:"1"
-                },
-                {
-                    type: 'confirm',
-                    name: 'confirmAdd',
-                    message: 'Would you like to add another person?',
-                    default: false,
+             
+                // {
+                //     type: 'confirm',
+                //     name: 'confirmAdd',
+                //     message: 'Would you like to add another person?',
+                //     default: false,
                     
-                },
+                // },
             ])
         } 
-        if (employeeData.type=="intern") {
+        if (employeeData.type=="update an employee role") {
+            return inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'type',
+                    message: 'which employee role would you like to update? (select one)',
+                    choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role']
+                  
+                },
+              
+            ])
+        } 
+        if (employeeData.type=="view all departments") {
             return inquirer.prompt([
                 {
                     type: 'input',
@@ -178,45 +181,43 @@ const promptQuestions = ()=> {
                         }
                     }
                 },
+              
+            ])
+        } 
+        if (employeeData.type=="view all roles") {
+            return inquirer.prompt([
                 {
                     type: 'input',
-                    name: 'email',
-                    message: 'Enter the email(Required)',
-                    validate: githubInput => {
-                        if (githubInput) {
+                    name: 'name',
+                    message: 'Enter the name? (Required)',
+                    validate: nameInput => {
+                        if (nameInput) {
                             return true;
                         } else {
-                            console.log('Please enter an email address!');
+                            console.log('Please enter a name!');
                             return false;
                         }
                     }
                 },
+              
+            ])
+        } 
+        if (employeeData.type=="view all employees") {
+            return inquirer.prompt([
                 {
                     type: 'input',
-                    name: 'school',
-                    message: 'Enter the school(Required)',
-                    validate: githubInput => {
-                        if (githubInput) {
+                    name: 'name',
+                    message: 'Enter the name? (Required)',
+                    validate: nameInput => {
+                        if (nameInput) {
                             return true;
                         } else {
-                            console.log('Please enter a school!');
+                            console.log('Please enter a name!');
                             return false;
                         }
                     }
                 },
-                {
-                    type: 'input',
-                    name: 'id',
-                    message: 'Enter an ID ',
-                    default:"1"
-                },
-                {
-                    type: 'confirm',
-                    name: 'confirmAdd',
-                    message: 'Would you like to add another person?',
-                    default: false,
-                    
-                },
+              
             ])
         } 
       })
@@ -242,7 +243,6 @@ promptQuestions()
     
     .then(employeeData => {
         // if (!employeeData.confirmAdd)
-        console.log("line97 fired")
         fs.writeFile('./dist/index.html', generateSite(employeeArr), err => {
         if (err) throw err;
         console.log('File saved!');
@@ -250,4 +250,23 @@ promptQuestions()
     }) 
 
 
-  insert 
+
+
+
+// call once somewhere in the beginning of the app
+// const cTable = require('console.table');
+// console.table([
+//   {
+//     name: 'foo',
+//     age: 10
+//   }, {
+//     name: 'bar',
+//     age: 20
+//   }
+// ]);
+
+// // prints
+// name  age
+// ----  ---
+// foo   10
+// bar   20
