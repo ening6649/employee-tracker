@@ -1,7 +1,7 @@
 const inquirer = require("inquirer")
-const db = require('./db/connection')
 
-const MainDataArr =[]
+
+const employeeArr =[]
 
 const promptQuestions = ()=> {
     
@@ -76,6 +76,7 @@ const promptQuestions = ()=> {
                     }
                 },
             ])
+
         } 
 
         if (employeeData.type=="add a department") {
@@ -240,14 +241,9 @@ const promptQuestions = ()=> {
 
 
 promptQuestions()
-    
-    .then(employeeData => {
-        // if (!employeeData.confirmAdd)
-        fs.writeFile('./dist/index.html', generateSite(employeeArr), err => {
-        if (err) throw err;
-        console.log('File saved!');
-        })
-    }) 
+    .then(employeeData=>{
+
+    })
 
 
 

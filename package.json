@@ -3,5 +3,24 @@
     "console.table": "^0.10.0",
     "inquirer": "^8.2.0",
     "mysql2": "^2.3.3"
-  }
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "employee-tracker",
+  "description": "* this page will display my team's basic info\r * a quick access to the teamate's email is display\r * a quick access to the github profile is display if one is an engineer\r ## Command-line application\r * this application will accept user input\r * application will start by node.index \r * when started, the application will prompt the user to enter info\r ## Team info\r * a user will be asked to select the employee type\r * only info specific to the employee type will be prompted \r ## Generate HTML \r * when the application is finished, a HTML page is generated\r * the HTML page will display the user's input\r ## Github and Email\r * when a user click on the email or github, the user opens that address in a new page\r * work in progress\r ## JEST test\r * The application passes all jest tests\r * for each of the role\r * work in progress\r ## walkthrough video: <a href=\"https://watch.screencastify.com/v/fsJkmLVtJHH60p8Yzohz\">My walkthrough video</a>",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ening6649/employee-tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ening6649/employee-tracker/issues"
+  },
+  "homepage": "https://github.com/ening6649/employee-tracker#readme"
 }
