@@ -1,4 +1,14 @@
-insert into department (name, id)
+insert into employee 
+    (first_name, last_name)
 values 
- ('sd', 'this', )
- ($(data), $(id),)
+ ('john', 'doe' ),
+ ('jane','shoe');
+
+
+
+
+insert into department
+    (Department_name)
+values 
+    ('clothing'),
+    ('electronics');

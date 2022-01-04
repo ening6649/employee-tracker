@@ -1,5 +1,5 @@
 const inquirer = require("inquirer")
-
+const db = require('./db/connection');
 
 const employeeArr =[]
 
@@ -65,19 +65,17 @@ const promptQuestions = ()=> {
                 {
                     type: 'input',
                     name: 'manager',
-                    message: 'Enter the manager(Required)',
-                    validate: githubInput => {
-                        if (githubInput) {
-                            return true;
-                        } else {
-                            console.log('Please enter a manager!');
-                            return false;
-                        }
-                    }
+                    message: 'Enter the manager',
                 },
             ])
 
         } 
+        // insert into employee 
+        // (first_name, last_name)
+        // values 
+        // ('sd', 'this', )
+        // ($(data), $(id),)
+
 
         if (employeeData.type=="add a department") {
             return inquirer.prompt([
