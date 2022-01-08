@@ -1,5 +1,6 @@
-const inquirer = require("inquirer")
+const inquirer = require("inquirer");
 const db = require('./db/connection');
+const cTable = require('console.table');
 
 const employeeArr =[]
 
@@ -15,7 +16,7 @@ const promptQuestions = ()=> {
             type: 'list',
             name: 'type',
             message: 'what would you like to do? (select one)',
-            choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role']
+            choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role', 'exit']
           
         },
       ])
@@ -68,7 +69,7 @@ const promptQuestions = ()=> {
                     message: 'Enter the manager',
                 },
             ])
-
+            
         } 
         // insert into employee 
         // (first_name, last_name)
@@ -165,60 +166,55 @@ const promptQuestions = ()=> {
               
             ])
         } 
+    
         if (employeeData.type=="view all departments") {
-            return inquirer.prompt([
-                {
-                    type: 'input',
-                    name: 'name',
-                    message: 'Enter the name? (Required)',
-                    validate: nameInput => {
-                        if (nameInput) {
-                            return true;
-                        } else {
-                            console.log('Please enter a name!');
-                            return false;
-                        }
-                    }
-                },
+            
+            // return inquirer.prompt([
+                // {
+                //     type: 'confirm',
+                //     name: 'viewdepartments',
+                //     message: 'Would you like to all roles?',
+                //     default: true,
+                // },
+                
+            // ]).then (answers=>{
+                const sql = `select*from department`
+                db.query(sql,(err,result)=>{
+                if (err) throw err;
+                
+                console.table(
+                    result
+                    )
+                })
+            //  })
               
-            ])
+            
         } 
         if (employeeData.type=="view all roles") {
             return inquirer.prompt([
                 {
-                    type: 'input',
-                    name: 'name',
-                    message: 'Enter the name? (Required)',
-                    validate: nameInput => {
-                        if (nameInput) {
-                            return true;
-                        } else {
-                            console.log('Please enter a name!');
-                            return false;
-                        }
-                    }
+                    type: 'confirm',
+                    name: 'viewroles',
+                    message: 'Would you like to all roles?',
+                    default: true,
                 },
               
             ])
         } 
         if (employeeData.type=="view all employees") {
-            return inquirer.prompt([
-                {
-                    type: 'input',
-                    name: 'name',
-                    message: 'Enter the name? (Required)',
-                    validate: nameInput => {
-                        if (nameInput) {
-                            return true;
-                        } else {
-                            console.log('Please enter a name!');
-                            return false;
-                        }
-                    }
-                },
-              
-            ])
+            const sql = `select*from employee`
+            db.query(sql,(err,result)=>{
+            if (err) throw err;
+            
+            console.table(
+                result
+                )
+            })
         } 
+        if (employeeData.type=="exit") {
+            return 
+        
+        }
       })
       .then (employeeData =>{
         // employeeData.employeeArr= [];
@@ -226,13 +222,13 @@ const promptQuestions = ()=> {
         console.log("139")
         // testdata = new Employee ('')
         employeeArr.push(employeeData);
-        console.log(employeeArr)
-        console.log('143')
-        if (employeeData.confirmAdd) {
-            return promptQuestions(employeeArr);
-        } else {
-            return employeeArr; 
-        }
+       
+        // if (employeeData.exit) {
+        //     return employeeArr;
+        // } 
+        // else {
+        //     return promptQuestions(employeeArr); 
+        // }
       })
 }
 
@@ -240,27 +236,66 @@ const promptQuestions = ()=> {
 
 promptQuestions()
     .then(employeeData=>{
+        console.log('data passed')
+        console.log(employeeData)
+        for (let i = 0; i < employeeArr.length-1; i++) {
+            if (employeeArr[i].employeenamefirst) {
+                const sql= `insert into employee
+                    (first_name, last_name, role_id)
+                    values
+                    (?,?,?)`;
+                const params = [
+                    employeeArr[i].employeenamefirst,
+                    employeeArr[i].employeenamelast,
+                    employeeArr[i].employeerole
+                ];
+                db.query(sql,params,(err,result)=>{
+                    if (err) throw err;
+                    console.log(result);
+                    // res.json({
+                    //     message: 'success',
+                    //     data: employeeArr
+                    // });
+                })
+                console.log('insert fired')
+            }
+            if (employeeArr[i].rolename) {
+                const sql = `insert into role
+                    (Title, Salary)
+                    values
+                    (?,?)`;
+                const params = [
+                    employeeArr[i].rolename,
+                    employeeArr[i].salary
+                ];
+                db.query(sql,params,(err,result)=>{
+                    if (err) {
+                        res.status(400).json({ error: err.message });
+                        return;
+                    }
+                })
+            }
+            if (employeeArr[i].departmentname) {
+                const sql = `insert into department
+                    (Department_name)
+                    values
+                    (?)`;
+                const params = [
+                    employeeArr[i].departmentname
+                ];
+                db.query(sql,params,(err,result)=>{
+                    if (err) {
+                        res.status(400).json({ error: err.message });
+                        return;
+                    }
+                })
+            }
 
+            
+        }
+         
     })
 
 
 
 
-
-// call once somewhere in the beginning of the app
-// const cTable = require('console.table');
-// console.table([
-//   {
-//     name: 'foo',
-//     age: 10
-//   }, {
-//     name: 'bar',
-//     age: 20
-//   }
-// ]);
-
-// // prints
-// name  age
-// ----  ---
-// foo   10
-// bar   20
